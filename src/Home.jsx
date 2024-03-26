@@ -1,13 +1,51 @@
-import React, {useState, useNavigate, useEffect} from 'react'
+import React, { useState, useEffect, useRef, memo } from "react";
 
+const ProductCard = memo(({ title, salePrice, originalPrice, thumbnailSrc }) => {
+  // const [cardHeight, setCardHeight] = useState(0);
+  // const cardRef = useRef(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      // if (cardRef.current) {
+      //   const imageHeight = cardRef.current.querySelector("img").offsetHeight;
+      //   const contentHeight = cardRef.current.querySelector(".content").offsetHeight;
+      //   setCardHeight(imageHeight + contentHeight);
+      // }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return (
+    <div
+      className="max-w-sm bg-white rounded-lg shadow-lg overflow-hidden"
+      // style={{ height: `${cardHeight}px` }}
+      // ref={cardRef}
+    >
+      <div className="relative overflow-hidden">
+        <img
+          className="w-full object-contain transition-transform duration-300 hover:scale-105"
+          src={thumbnailSrc}
+          alt="Product Thumbnail"
+        />
+      </div>
+      <div className="p-4 flex flex-col content">
+      <h3 className="text-lg font-semibold mb-2 text-gray-800 line-clamp-2">{title}</h3>
+        <div className="flex items-baseline mt-auto">
+          <span className="text-green-600 font-bold mr-2 text-xl">${salePrice}</span>
+          <span className="text-gray-500 line-through text-sm">${originalPrice}</span>
+        </div>
+      </div>  
+    </div>
+  );
+});
 
 const Home = () => {
-
-  console.log("home")
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  // const navigate = useNavigate();
 
   const deleteProduct = async (id) => {
     const isOK = window.confirm("ARE YOU SURE.");
@@ -44,7 +82,22 @@ const Home = () => {
   }, []);
 
   if (isLoading) {
-    return <div className="text-3xl font-bold">Loading...</div>;
+    return (
+      <div className="text-3xl font-bold">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8 lg:m-32 m-10">
+          {/* Render skeleton loaders */}
+          {Array.from({ length: 8 }).map((_, index) => (
+            <div key={index} className="flex flex-col">
+              <div className="w-full h-60 bg-gray-400 rounded-3xl"></div>
+              <div className="mt-4 h-16 overflow-hidden">
+                <h3 className="w-full bg-gray-400 h-5 rounded-full"></h3>
+              </div>
+              <p className="w-full h-3 bg-gray-400 rounded-full"></p>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   if (error) {
@@ -53,34 +106,28 @@ const Home = () => {
 
   return (
     <div className="bg-white">
-  <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-    <h2 className="sr-only">Products</h2>
+      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+        <h2 className="sr-only">Products</h2>
 
-    <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-      {products.map((product) => (
-        <a href={`/productpage?id=${product._id}`} className="group">
-          <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-black xl:aspect-h-8 xl:aspect-w-7">
-            <img
-              src={product.thumbnail}
-              alt={product.imageAlt}
-              className="h-full w-full object-cover object-center group-hover:opacity-75"
-            />
-          </div>
-          <div className="mt-4 h-16 overflow-hidden">
-            <h3 className="text-sm text-black font-semibold -line-clamp-2">{product.title}</h3>
-          </div>
-          <div className='flex gap-2 items-baseline'>
-            <p className="mt-1 text-2xl font-medium text-gray-900">₹ {product.price}</p>
-            <strike className="mt-1 text-md font-medium text-gray-900">₹ {product.price}</strike>
-          </div>
-        </a>
-      ))}
+        <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+          {products.map((product) => (
+            <a
+              key={product._id}
+              href={`/productpage?id=${product._id}`}
+              className="group"
+            >
+              <ProductCard
+                title={product.title}
+                salePrice={product.price}
+                originalPrice={product.price}
+                thumbnailSrc={product.thumbnail}
+              />
+            </a>
+          ))}
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+  );
+};
 
-
-  )
-}
-
-export default Home
+export default Home;

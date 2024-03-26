@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const Login = () => {
+const LoginPhone = () => {
   // const Login = ({ AUTH_URL }) => {
   const searchParams = new URLSearchParams(window.location.search);
   const accessToken = searchParams.get("access_token");
@@ -46,6 +46,8 @@ const Login = () => {
         phEmailJwt: phEmailJwt,
       });
 
+      localStorage.setItem("accessToken", accessToken)
+
       // Set cookie with 180-day expiration
       const cookieExpire = new Date(
         Date.now() + 180 * 24 * 60 * 60 * 1000
@@ -62,6 +64,15 @@ const Login = () => {
     }
   }, [accessToken]);
 
+  window.open(
+    AUTH_URL,
+    "VARIETY HEAVEN",
+    "toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0, width=500, height=560, top=" +
+      (window.screen.height - 600) / 2 +
+      ", left=" +
+      (window.screen.width - 500) / 2
+  )
+
   return (
     <div>
       <div>
@@ -69,7 +80,7 @@ const Login = () => {
         <p style={{ color: "#a6a6a6" }}>Welcome to Sign In with Phone</p> */}
 
         {accessToken ? (
-          <span><Link to={"/"}>Sign Out</Link></span>
+          <span><Link to={"/"}></Link></span>
         ) : (
           <span>
             <button
@@ -95,4 +106,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPhone;
