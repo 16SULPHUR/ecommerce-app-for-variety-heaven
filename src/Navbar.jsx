@@ -22,7 +22,8 @@ export default function Navbar({ isLoggedIn }) {
 
   const login = async () => {
     const CLIENT_ID = "14168416091898906021";
-    const redirectURL = 'http://127.0.0.1:3000'
+    // const redirectURL = 'http://127.0.0.1:3000'
+    const redirectURL = 'https://varietyheaven.vercel.app'
     const AUTH_URL = `https://auth.phone.email/log-in?client_id=${CLIENT_ID}&redirect_url=${redirectURL}`;
 
     window.open(

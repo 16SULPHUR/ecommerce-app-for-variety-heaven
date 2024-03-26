@@ -45,7 +45,8 @@ const auth = async () => {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("logedIn", true)
 
-      window.location.href = "http://127.0.0.1:3000"
+    //   window.location.href = "http://127.0.0.1:3000"
+      window.location.href = "https://varietyheaven.vercel.app"
 
       // Set cookie with 180-day expiration
       const cookieExpire = new Date(
