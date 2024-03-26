@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import Cart from "./Cart";
+// import Cart from "./Cart";
 import Navbar from "./Navbar";
 import Home from "./Home";
 import ProductPage from "./ProductPage";
@@ -30,7 +30,7 @@ const App = () => {
             <>
               <Route path="" element={<Home />} />
               <Route path="productpage" element={<ProductPage />} />
-              <Route path="cart" element={<Cart />} />
+              <Route path="cart" element={<div>CART</div>} />
             </>
           ) : (
             <>
