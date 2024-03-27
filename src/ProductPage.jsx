@@ -33,6 +33,7 @@ const ProductPage = () => {
         // const response = await fetch(`https://vh-apis.onrender.com/getProduct?id=${id}`);
         const response = await fetch(
           `https://vh-apis.onrender.com/getProduct?id=${id}`
+          // `http://127.0.0.1:3005/getProduct?id=${id}`
         );
         const data = await response.json();
         console.log(data);
@@ -83,11 +84,11 @@ const ProductPage = () => {
     <div className="flex flex-col justify-between lg:flex-row gap-16 lg:items-start lg:mx-56 mx-6 my-20">
       <div className="flex flex-col gap-6 lg:w-2/4">
           <img
-            src={activeImg}
+            src={activeImg || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEu5mn0Q0Waa49vsVwm3liZ7PrjGUZAI9XcQ&usqp=CAU"}
             alt=""
             className="w-full h-full aspect-square self-center object-contain rounded-xl shadow-sm"
           />
-        <div className="flex flex-row justify-between h-24 lg-w-full w-full overflow-auto gap-3">
+        <div className="flex flex-row justify-between h-24 lg-w-full w-full overflow-x-auto overflow-y-hidden gap-3">
           <img
             src={images.img1}
             alt=""
@@ -123,21 +124,21 @@ const ProductPage = () => {
       <div className="flex flex-col gap-4 lg:w-2/4">
         <div>
           <span className=" text-violet-600 font-semibold">
-            Special Sneaker
+            {product.catagory || ""}
           </span>
           <h1 className="text-3xl font-bold">{product.title}</h1>
         </div>
         <p className="text-gray-700">{product.description}</p>
         <div className="flex gap-2 items-baseline">
           <p className="mt-1 text-3xl font-medium text-gray-900">
-            ₹ {product.price}
+            ₹ {product.discountedPrice}
           </p>
           <strike className="mt-1 text-lg font-medium text-gray-900">
             ₹ {product.price}
           </strike>
         </div>
         <div className="flex lg:flex-row flex-col items-center gap-12">
-          <div className="flex flex-row items-center">
+          {/* <div className="flex flex-row items-center">
             <button
               className="bg-gray-200 py-2 px-5 rounded-lg text-violet-800 text-3xl"
               onClick={decrementAmount}
@@ -151,7 +152,7 @@ const ProductPage = () => {
             >
               +
             </button>
-          </div>
+          </div> */}
           <button className="bg-violet-800 text-white font-semibold py-3 px-16 rounded-xl h-full">
             Add to Cart
           </button>

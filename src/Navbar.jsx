@@ -24,6 +24,7 @@ export default function Navbar({ isLoggedIn }) {
     const CLIENT_ID = "14168416091898906021";
     // const redirectURL = 'http://127.0.0.1:3000'
     const redirectURL = 'https://varietyheaven.vercel.app'
+    // const redirectURL = 'http://127.0.0.1:3000'
     const AUTH_URL = `https://auth.phone.email/log-in?client_id=${CLIENT_ID}&redirect_url=${redirectURL}`;
 
     window.open(
@@ -109,12 +110,12 @@ export default function Navbar({ isLoggedIn }) {
                         </div>
                         <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                           <Menu.Item>
-                            <a
-                              href="#"
+                            <Link
+                              to={`/profile`}
                               className="block px-4 py-2 text-sm text-gray-700"
                             >
                               Your Profile
-                            </a>
+                            </Link>
                           </Menu.Item>
                           <Menu.Item>
                             <a

@@ -6,6 +6,7 @@ import Home from "./Home";
 import ProductPage from "./ProductPage";
 import LoginPhone from "./LoginPhone";
 import auth from "./auth";
+import Profile from "./Profile";
 
 const App = () => {
   const [isLoggedIn, setLoggedInState] = useState(
@@ -31,6 +32,7 @@ const App = () => {
               <Route path="" element={<Home />} />
               <Route path="productpage" element={<ProductPage />} />
               <Route path="cart" element={<div>CART</div>} />
+              <Route path="profile" element={<Profile/>} />
             </>
           ) : (
             <>

@@ -27,15 +27,15 @@ const ProductCard = memo(({ title, salePrice, originalPrice, thumbnailSrc }) => 
       <div className="relative overflow-hidden">
         <img
           className="w-full object-contain transition-transform duration-300 hover:scale-105"
-          src={thumbnailSrc}
+          src={thumbnailSrc||"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEu5mn0Q0Waa49vsVwm3liZ7PrjGUZAI9XcQ&usqp=CAU"}
           alt="Product Thumbnail"
         />
       </div>
       <div className="p-4 flex flex-col content">
       <h3 className="text-lg font-semibold mb-2 text-gray-800 line-clamp-2">{title}</h3>
         <div className="flex items-baseline mt-auto">
-          <span className="text-green-600 font-bold mr-2 text-xl">${salePrice}</span>
-          <span className="text-gray-500 line-through text-sm">${originalPrice}</span>
+          <span className="text-green-600 font-bold mr-2 text-xl">₹{salePrice || originalPrice}</span>
+          <span className="text-gray-500 line-through text-sm">₹{originalPrice || ""}</span>
         </div>
       </div>  
     </div>
@@ -44,24 +44,31 @@ const ProductCard = memo(({ title, salePrice, originalPrice, thumbnailSrc }) => 
 
 const Home = () => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
-  const deleteProduct = async (id) => {
-    const isOK = window.confirm("ARE YOU SURE.");
-    if (isOK) {
-      try {
-        const response = await fetch(
-          `https://vh-apis.onrender.com/deleteProduct?id=${id}`
-        );
+  useEffect(() => {
+    let filtered = products;
 
-        // Fetch updated products data after successful deletion
-        fetchProducts();
-      } catch (err) {
-        setError(err.message);
-      }
+    if (selectedCategory) {
+      console.log(selectedCategory)
+      filtered = filtered.filter(
+        (product) => product.catagory === selectedCategory
+      );
     }
-  };
+
+    if (minPrice && maxPrice) {
+      filtered = filtered.filter(
+        (product) => product.price >= minPrice && product.price <= maxPrice
+      );
+    }
+
+    setFilteredProducts(filtered);
+  }, [products, selectedCategory, minPrice, maxPrice]);
 
   const fetchProducts = async () => {
     try {
@@ -109,8 +116,44 @@ const Home = () => {
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <h2 className="sr-only">Products</h2>
 
+        {/* Category filter */}
+        <div className="flex items-center mb-4">
+  <label htmlFor="category" className="mr-2 font-semibold text-gray-700">
+    Shop by Category:
+  </label>
+  <select
+    id="category"
+    value={selectedCategory}
+    onChange={(e) => setSelectedCategory(e.target.value)}
+    className="py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+  >
+    <option value="">All</option>
+    <option value="Ruffle Saree">Ruffle Saree</option>
+    <option value="Kurti">Kurti</option>
+    <option value="Partyware">Partyware</option>
+  </select>
+</div>
+
+        {/* Price filter */}
+        {/* <div>
+          <label htmlFor="minPrice">Min Price:</label>
+          <input
+            type="number"
+            id="minPrice"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+          />
+          <label htmlFor="maxPrice">Max Price:</label>
+          <input
+            type="number"
+            id="maxPrice"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+          />
+        </div> */}
+
         <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <a
               key={product._id}
               href={`/productpage?id=${product._id}`}
@@ -118,7 +161,7 @@ const Home = () => {
             >
               <ProductCard
                 title={product.title}
-                salePrice={product.price}
+                salePrice={product.discountedPrice || ""}
                 originalPrice={product.price}
                 thumbnailSrc={product.thumbnail}
               />
@@ -129,5 +172,6 @@ const Home = () => {
     </div>
   );
 };
+
 
 export default Home;
