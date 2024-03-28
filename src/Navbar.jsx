@@ -67,10 +67,11 @@ export default function Navbar({ isLoggedIn }) {
                 <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                   <div className="flex flex-shrink-0 items-center">
                     <img
-                      className="h-12 w-auto"
-                      src="https://ucarecdn.com/2566b618-ae3a-44c3-a9c1-9ffe6d71a48c/logo.png"
+                      className="h-14 w-auto self-center"
+                      src="/color_logo.png"
                       alt="VARIETY HEAVEN"
                     />
+                    <span className="text-white font-mono self-center">Gamming</span>
                   </div>
                   <div className="hidden self-center sm:ml-6 sm:block">
                     <div className="flex space-x-4">

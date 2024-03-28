@@ -137,9 +137,9 @@ const Home = () => {
             className="py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 w-fit"
           >
             <option value="">All</option>
-            <option value="Ruffle Saree">Ruffle Saree</option>
-            <option value="Kurti">Kurti</option>
-            <option value="Partyware">Partyware</option>
+            <option value="Headsets">Headsets</option>
+            <option value="Mices">Mices</option>
+            <option value="Gaming Chairs">Gaming Chairs</option>
           </select>
         </div>
 
@@ -161,33 +161,33 @@ const Home = () => {
               </button>
               <button
                 className={`block w-full py-2 px-3 text-left rounded-md mb-2 ${
-                  selectedCategory === "Ruffle Saree"
+                  selectedCategory === "Headsets"
                     ? "bg-indigo-500 text-white"
                     : "bg-white text-gray-700 hover:bg-gray-100"
                 }`}
-                onClick={() => setSelectedCategory("Ruffle Saree")}
+                onClick={() => setSelectedCategory("Headsets")}
               >
-                Ruffle Saree
+                Headsets
               </button>
               <button
                 className={`block w-full py-2 px-3 text-left rounded-md mb-2 ${
-                  selectedCategory === "Kurti"
+                  selectedCategory === "Mices"
                     ? "bg-indigo-500 text-white"
                     : "bg-white text-gray-700 hover:bg-gray-100"
                 }`}
-                onClick={() => setSelectedCategory("Kurti")}
+                onClick={() => setSelectedCategory("Mices")}
               >
-                Kurti
+                Mices
               </button>
               <button
                 className={`block w-full py-2 px-3 text-left rounded-md mb-2 ${
-                  selectedCategory === "Partyware"
+                  selectedCategory === "Gaming Chairs"
                     ? "bg-indigo-500 text-white"
                     : "bg-white text-gray-700 hover:bg-gray-100"
                 }`}
-                onClick={() => setSelectedCategory("Partyware")}
+                onClick={() => setSelectedCategory("Gaming Chairs")}
               >
-                Partyware
+                Gaming Chairs
               </button>
             </div>
           </div>
