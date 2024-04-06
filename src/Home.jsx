@@ -138,7 +138,7 @@ const Home = () => {
           >
             <option value="">All</option>
             <option value="Headsets">Headsets</option>
-            <option value="Mices">Mices</option>
+            <option value="Mices">Mice</option>
             <option value="Gaming Chairs">Gaming Chairs</option>
           </select>
         </div>
