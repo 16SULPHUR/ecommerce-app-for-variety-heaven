@@ -9,6 +9,11 @@ import auth from "./auth";
 import Profile from "./Profile";
 import UserCart from "./UserCart";
 import { getProducts } from "./getUser";
+import ContactUs from "./ContactUs";
+import Terms from "./Terms";
+import PrivecyPolicy from "./PrivecyPolicy";
+import RefundPolicy from "./RefundPolicy";
+import ShippingPolicy from "./ShippingPolicy";
 
 const App = () => {
   const [isLoggedIn, setLoggedInState] = useState(
@@ -62,6 +67,11 @@ const App = () => {
               <Route path="login" element={<LoginPhone />} />
             </>
           )}
+          <Route path="contactus" element={<ContactUs />} />
+          <Route path="terms" element={<Terms />} />
+          <Route path="privecypolicy" element={<PrivecyPolicy />} />
+          <Route path="cancelationpolicy" element={<RefundPolicy />} />
+          <Route path="shippingpolicy" element={<ShippingPolicy />} />
         </Route>
       </Routes>
     </>
