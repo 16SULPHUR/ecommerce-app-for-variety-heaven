@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { addToCartRequest } from "./getUser";
 
 const ProductPage = () => {
   const [images, setImages] = useState({
@@ -80,6 +81,14 @@ const ProductPage = () => {
     return <div>Product not found</div>;
   }
 
+  const handleAddToCart = async (id) =>{
+    if(!localStorage.getItem("phone")){
+      window.location.href = "https://varietyheaven.in/login"
+    }
+    await addToCartRequest(localStorage.getItem("phone"), id)
+    // console.log(id)
+  }
+
   return (
     <div className="flex flex-col justify-between lg:flex-row gap-16 lg:items-start lg:mx-56 mx-6 my-20">
       <div className="flex flex-col gap-6 lg:w-2/4">
@@ -153,7 +162,7 @@ const ProductPage = () => {
               +
             </button>
           </div> */}
-          <button className="bg-violet-800 text-white font-semibold py-3 px-16 rounded-xl h-full">
+          <button onClick={()=>handleAddToCart(product._id)} className="bg-violet-800 text-white font-semibold py-3 px-16 rounded-xl h-full">
             Add to Cart
           </button>
         </div>

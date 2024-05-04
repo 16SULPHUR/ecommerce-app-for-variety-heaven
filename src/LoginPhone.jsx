@@ -46,7 +46,7 @@ const LoginPhone = () => {
         phEmailJwt: phEmailJwt,
       });
 
-      localStorage.setItem("accessToken", accessToken)
+      localStorage.setItem("accessToken", accessToken);
 
       // Set cookie with 180-day expiration
       const cookieExpire = new Date(
@@ -71,7 +71,8 @@ const LoginPhone = () => {
       (window.screen.height - 600) / 2 +
       ", left=" +
       (window.screen.width - 500) / 2
-  )
+  );
+
 
   return (
     <div>
@@ -80,11 +81,13 @@ const LoginPhone = () => {
         <p style={{ color: "#a6a6a6" }}>Welcome to Sign In with Phone</p> */}
 
         {accessToken ? (
-          <span><Link to={"/"}></Link></span>
+          <span>
+            <Link to={"/"}></Link>
+          </span>
         ) : (
           <span>
             <button
-              //   id="btn_ph_login"
+              id="btn_ph_login"
               //   name="btn_ph_login"
               type="button"
               onClick={() =>
@@ -97,7 +100,9 @@ const LoginPhone = () => {
                     (window.screen.width - 500) / 2
                 )
               }
-            >Sign in</button>
+            >
+              Sign in
+            </button>
           </span>
         )}
         {/* Sign In with Phone */}

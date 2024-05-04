@@ -23,8 +23,8 @@ export default function Navbar({ isLoggedIn }) {
   const login = async () => {
     const CLIENT_ID = "14168416091898906021";
     // const redirectURL = 'http://127.0.0.1:3000'
-    const redirectURL = 'https://varietyheaven.vercel.app'
-    // const redirectURL = 'http://127.0.0.1:3000'
+    // const redirectURL = "https://varietyheaven.vercel.app";
+    const redirectURL = 'https://varietyheaven.in'
     const AUTH_URL = `https://auth.phone.email/log-in?client_id=${CLIENT_ID}&redirect_url=${redirectURL}`;
 
     window.open(
@@ -66,12 +66,13 @@ export default function Navbar({ isLoggedIn }) {
                 </div>
                 <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                   <div className="flex flex-shrink-0 items-center">
+                    <Link to={"/"}>
                     <img
                       className="h-14 w-auto self-center"
-                      src="/color_logo.png"
+                      src="/logo.png"
                       alt="VARIETY HEAVEN"
                     />
-                    <span className="text-white font-mono self-center">Gamming</span>
+                    </Link>
                   </div>
                   <div className="hidden self-center sm:ml-6 sm:block">
                     <div className="flex space-x-4">

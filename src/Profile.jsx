@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import { getUser } from "./getUser";
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState('John Doe');
-  const [email, setEmail] = useState('john.doe@example.com');
-  const [phone, setPhone] = useState('(123) 456-7890');
+  const [name, setName] = useState("John Doe");
+  const [email, setEmail] = useState("john.doe@example.com");
+  const [phone, setPhone] = useState("(123) 456-7890");
+
 
   const cartItems = [
-    { id: 1, name: 'Product 1', price: 19.99, quantity: 2 },
-    { id: 2, name: 'Product 2', price: 29.99, quantity: 1 },
+    { id: 1, name: "Product 1", price: 19.99, quantity: 2 },
+    { id: 2, name: "Product 2", price: 29.99, quantity: 1 },
   ];
 
   const orders = [
-    { id: 1, date: '2023-04-01', total: 59.98, status: 'Delivered' },
-    { id: 2, date: '2023-03-15', total: 89.97, status: 'Processing' },
+    { id: 1, date: "2023-04-01", total: 59.98, status: "Delivered" },
+    { id: 2, date: "2023-03-15", total: 89.97, status: "Processing" },
   ];
 
   const handleEditClick = () => {
@@ -28,6 +30,28 @@ export default function Profile() {
   const handleCancelClick = () => {
     setIsEditing(false);
   };
+
+  const fetchData = async () => {
+    try {
+      const resp = await getUser(localStorage.getItem("c"));
+
+      console.log(resp);
+
+      if(resp){
+        setName(resp.name || "Name not added")
+        setPhone(resp.phone || "Phone number not found")
+        setEmail(resp.email || "no email added")
+      }
+
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+
+    fetchData()
+  }, []);
 
   return (
     <div className="bg-gray-100 min-h-screen py-16">
@@ -99,8 +123,8 @@ export default function Profile() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-8"> */}
+          {/* <div>
             <h3 className="text-xl font-semibold mb-4 text-gray-800">Cart</h3>
             <div className="overflow-x-auto shadow-md rounded-lg">
               <table className="w-full table-auto divide-y divide-gray-200">
@@ -123,16 +147,24 @@ export default function Profile() {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {cartItems.map((item) => (
                     <tr key={item.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">{item.name}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">${item.price}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{item.quantity}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">${(item.price * item.quantity).toFixed(2)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {item.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        ${item.price}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {item.quantity}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        ${(item.price * item.quantity).toFixed(2)}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-          </div>
+          </div> */}
 
           <div>
             <h3 className="text-xl font-semibold mb-4 text-gray-800">Orders</h3>
@@ -157,15 +189,21 @@ export default function Profile() {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {orders.map((order) => (
                     <tr key={order.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">{order.id}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{order.date}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">${order.total}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {order.id}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {order.date}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        ${order.total}
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
                           className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            order.status === 'Delivered'
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-yellow-100 text-yellow-800'
+                            order.status === "Delivered"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-yellow-100 text-yellow-800"
                           }`}
                         >
                           {order.status}
@@ -177,7 +215,7 @@ export default function Profile() {
               </table>
             </div>
           </div>
-        </div>
+        {/* </div> */}
       </div>
     </div>
   );

@@ -1,23 +1,40 @@
 import React, { useState, useEffect, useRef, memo } from "react";
+import SignupModal from "./Signupmodal";
+import { addToCartRequest } from "./getUser";
 
 const ProductCard = memo(
-  ({ title, salePrice, originalPrice, thumbnailSrc }) => {
+  ({ title, salePrice, originalPrice, thumbnailSrc, id }) => {
     // const [cardHeight, setCardHeight] = useState(0);
     // const cardRef = useRef(null);
 
-    useEffect(() => {
-      const handleResize = () => {
-        // if (cardRef.current) {
-        //   const imageHeight = cardRef.current.querySelector("img").offsetHeight;
-        //   const contentHeight = cardRef.current.querySelector(".content").offsetHeight;
-        //   setCardHeight(imageHeight + contentHeight);
-        // }
-      };
+    // useEffect(() => {
+    //   const handleResize = () => {
+    //     // if (cardRef.current) {
+    //     //   const imageHeight = cardRef.current.querySelector("img").offsetHeight;
+    //     //   const contentHeight = cardRef.current.querySelector(".content").offsetHeight;
+    //     //   setCardHeight(imageHeight + contentHeight);
+    //     // }
+    //   };
 
-      handleResize();
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    //   handleResize();
+    //   window.addEventListener("resize", handleResize);
+    //   return () => window.removeEventListener("resize", handleResize);
+    // }, []);
+
+    const addToCart = async (id) => {
+      const searchParams = new URLSearchParams(window.location.search);
+      if (!searchParams.get("c") && !localStorage.getItem("c")) {
+        window.location.href = "https://varietyheaven.in/login";
+      }
+
+      const ph = searchParams.get("c") || localStorage.getItem("c");
+      console.log(ph);
+      const resp = await addToCartRequest(ph, id);
+
+      if (resp) {
+        alert("Product added to cart");
+      }
+    };
 
     return (
       <div
@@ -25,28 +42,38 @@ const ProductCard = memo(
         // style={{ height: `${cardHeight}px` }}
         // ref={cardRef}
       >
-        <div className="relative overflow-hidden">
-          <img
-            className="w-full object-contain transition-transform duration-300 hover:scale-105"
-            src={
-              thumbnailSrc ||
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEu5mn0Q0Waa49vsVwm3liZ7PrjGUZAI9XcQ&usqp=CAU"
-            }
-            alt="Product Thumbnail"
-          />
-        </div>
-        <div className="p-4 flex flex-col content">
-          <h3 className="text-lg font-semibold mb-2 text-gray-800 line-clamp-2">
-            {title}
-          </h3>
-          <div className="flex items-baseline mt-auto">
-            <span className="text-green-600 font-bold mr-2 text-xl">
-              ₹{salePrice || originalPrice}
-            </span>
-            <span className="text-gray-500 line-through text-sm">
-              ₹{originalPrice || ""}
-            </span>
+        <a key={id} href={`/productpage?id=${id}`} className="group">
+          <div className="relative overflow-hidden">
+            <img
+              className="w-full object-contain transition-transform duration-300 hover:scale-105"
+              src={
+                thumbnailSrc ||
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEu5mn0Q0Waa49vsVwm3liZ7PrjGUZAI9XcQ&usqp=CAU"
+              }
+              alt="Product Thumbnail"
+            />
           </div>
+          <div className="p-4 flex flex-col content">
+            <h3 className="text-lg font-semibold mb-2 text-gray-800 line-clamp-2 h-14">
+              {title}
+            </h3>
+            <div className="flex items-baseline mt-auto">
+              <span className="text-green-600 font-bold mr-2 text-xl">
+                ₹{salePrice || originalPrice}
+              </span>
+              <span className="text-gray-500 line-through text-sm">
+                ₹{originalPrice || ""}
+              </span>
+            </div>
+          </div>
+        </a>
+        <div className="flex justify-end w-full gap-2 h-fit">
+          <button
+            className="bg-black text-white py-2 px-3 text-xl   rounded-lg font-semibold me-3 mb-3"
+            onClick={() => addToCart(id)}
+          >
+            +🛒
+          </button>
         </div>
       </div>
     );
@@ -61,6 +88,8 @@ const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [catagories, setCatagories] = useState([]);
+  const [formattedCatagories, setFormattedCatagories] = useState([  ])
 
   useEffect(() => {
     let filtered = products;
@@ -95,8 +124,31 @@ const Home = () => {
     }
   };
 
+  const fetchCatagories = async () => {
+    try {
+      const res = await fetch(
+        "https://vh-apis.onrender.com/addCatagory/getCatagories"
+      );
+      if (!res.ok) {
+        throw new Error("Failed to fetch categories");
+      }
+      const catagoriesData = await res.json();
+      console.log("Fetched categories:", catagoriesData.catagories);
+
+
+      // const lowercaseArray = cat.map((str) => str.toLowerCase());
+
+
+      setCatagories(catagoriesData.catagories);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      throw error;
+    }
+  };
+
   useEffect(() => {
-    fetchProducts();
+    fetchProducts();    
+    fetchCatagories();
   }, []);
 
   if (isLoading) {
@@ -122,8 +174,19 @@ const Home = () => {
     return <div>Error: {error}</div>;
   }
 
+  let signupModalStatus = false;
+  const searchParams = new URLSearchParams(window.location.search);
+  if (searchParams.get("signup")) {
+    signupModalStatus = searchParams.get("signup") == "true";
+  }
+
+  const toTitleCase = (str) => {
+    return str.replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
   return (
     <div className="bg-white">
+      <SignupModal open={signupModalStatus} />
       <div className="mx-auto max-w-7l py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
         {/* Mobile Category Dropdown */}
         <div className="mb-4 sm:hidden flex items-center gap-4 mx-6">
@@ -137,9 +200,11 @@ const Home = () => {
             className="py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 w-fit"
           >
             <option value="">All</option>
-            <option value="Headsets">Headsets</option>
-            <option value="Mices">Mice</option>
-            <option value="Gaming Chairs">Gaming Chairs</option>
+            {catagories.map((category) => (
+              <option key={category} value={category}>
+                {toTitleCase(category)}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -159,36 +224,22 @@ const Home = () => {
               >
                 All
               </button>
+
+              {catagories.map((category) => (
               <button
-                className={`block w-full py-2 px-3 text-left rounded-md mb-2 ${
-                  selectedCategory === "Headsets"
-                    ? "bg-indigo-500 text-white"
-                    : "bg-white text-gray-700 hover:bg-gray-100"
-                }`}
-                onClick={() => setSelectedCategory("Headsets")}
-              >
-                Headsets
-              </button>
-              <button
-                className={`block w-full py-2 px-3 text-left rounded-md mb-2 ${
-                  selectedCategory === "Mices"
-                    ? "bg-indigo-500 text-white"
-                    : "bg-white text-gray-700 hover:bg-gray-100"
-                }`}
-                onClick={() => setSelectedCategory("Mices")}
-              >
-                Mices
-              </button>
-              <button
-                className={`block w-full py-2 px-3 text-left rounded-md mb-2 ${
-                  selectedCategory === "Gaming Chairs"
-                    ? "bg-indigo-500 text-white"
-                    : "bg-white text-gray-700 hover:bg-gray-100"
-                }`}
-                onClick={() => setSelectedCategory("Gaming Chairs")}
-              >
-                Gaming Chairs
-              </button>
+              className={`block w-full py-2 px-3 text-left rounded-md mb-2 ${
+                selectedCategory === category
+                  ? "bg-indigo-500 text-white"
+                  : "bg-white text-gray-700 hover:bg-gray-100"
+              }`}
+              onClick={() => setSelectedCategory(category)}
+            >
+              {toTitleCase(category)}
+            </button>
+            ))}
+
+
+              
             </div>
           </div>
 
@@ -197,18 +248,13 @@ const Home = () => {
             <h2 className="sr-only">Products</h2>
             <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
               {filteredProducts.map((product) => (
-                <a
-                  key={product._id}
-                  href={`/productpage?id=${product._id}`}
-                  className="group"
-                >
-                  <ProductCard
-                    title={product.title}
-                    salePrice={product.discountedPrice || ""}
-                    originalPrice={product.price}
-                    thumbnailSrc={product.thumbnail}
-                  />
-                </a>
+                <ProductCard
+                  title={product.title}
+                  salePrice={product.discountedPrice || ""}
+                  originalPrice={product.price}
+                  thumbnailSrc={product.thumbnail}
+                  id={product._id}
+                />
               ))}
             </div>
           </div>

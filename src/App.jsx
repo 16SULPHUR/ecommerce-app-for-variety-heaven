@@ -7,11 +7,14 @@ import ProductPage from "./ProductPage";
 import LoginPhone from "./LoginPhone";
 import auth from "./auth";
 import Profile from "./Profile";
+import UserCart from "./UserCart";
+import { getProducts } from "./getUser";
 
 const App = () => {
   const [isLoggedIn, setLoggedInState] = useState(
     localStorage.getItem("logedIn") === "true"
   );
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const loggedIn = localStorage.getItem("logedIn") === "true";
@@ -22,6 +25,21 @@ const App = () => {
 
   auth();
 
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const response = await getProducts(); // Assuming getProducts function fetches all products
+            setProducts(response);
+        } catch (error) {
+            console.error("Error fetching products:", error);
+        }
+    };
+
+    fetchData();
+}, []);
+
+
+
   window.document.title = "VARIETY HEAVEN";
   return (
     <>
@@ -31,8 +49,9 @@ const App = () => {
             <>
               <Route path="" element={<Home />} />
               <Route path="productpage" element={<ProductPage />} />
-              <Route path="cart" element={<div>CART</div>} />
+              <Route path="cart" element={<UserCart products={products}/>} />
               <Route path="profile" element={<Profile />} />
+              <Route path="login" element={<LoginPhone />} />
             </>
           ) : (
             <>
