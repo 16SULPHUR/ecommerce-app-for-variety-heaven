@@ -24,7 +24,7 @@ const ProductCard = memo(
     const addToCart = async (id) => {
       const searchParams = new URLSearchParams(window.location.search);
       if (!searchParams.get("c") && !localStorage.getItem("c")) {
-        window.location.href = "https://varietyheaven.in/login";
+        window.location.href = "https://varietyheaven.vercel.app/login";
       }
 
       const ph = searchParams.get("c") || localStorage.getItem("c");

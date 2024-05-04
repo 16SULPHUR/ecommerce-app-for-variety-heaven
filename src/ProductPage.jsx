@@ -83,7 +83,7 @@ const ProductPage = () => {
 
   const handleAddToCart = async (id) =>{
     if(!localStorage.getItem("phone")){
-      window.location.href = "https://varietyheaven.in/login"
+      window.location.href = "https://varietyheaven.vercel.app/login"
     }
     await addToCartRequest(localStorage.getItem("phone"), id)
     // console.log(id)

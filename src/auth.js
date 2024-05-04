@@ -32,12 +32,12 @@ const encryptPhoneNumber = (phoneNumber, shift) => {
 
       if (response.isNew || !response.isSignupComplete) {
         // window.location.href = `http://127.0.0.1:3000/?signup=${true}&c=${encryptPhoneNumber(phone,3)}`
-        window.location.href = `https://varietyheaven.in/?signup=${true}&c=${encryptPhoneNumber(phone,3)}`
+        window.location.href = `https://varietyheaven.vercel.app/?signup=${true}&c=${encryptPhoneNumber(phone,3)}`
         return false
       }
 
       // window.location.href = `http://127.0.0.1:3000/?signup=${false}&c=${encryptPhoneNumber(phone,3)}`
-      window.location.href = `https://varietyheaven.in/?signup=${false}&c=${encryptPhoneNumber(phone,3)}`
+      window.location.href = `https://varietyheaven.vercel.app/?signup=${false}&c=${encryptPhoneNumber(phone,3)}`
 
       return true
 
